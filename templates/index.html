@@ -16,6 +16,7 @@
 <nav>
     <button onclick="showTab('dashboard')">Dashboard</button>
     <button onclick="showTab('practice')">Practice Problems</button>
+    <button onclick="showTab('guided')">Guided Scripts</button>
     <button onclick="showTab('python')">Python Lab</button>
     <button onclick="showTab('javascript')">JavaScript Lab</button>
     <button onclick="showTab('sql')">SQL Lab</button>
@@ -42,6 +43,25 @@
                 <button onclick="nextProblem()">Next Problem</button>
             </div>
             <div id="problemBox" class="problem-box"></div>
+        </div>
+    </section>
+
+    
+    <section id="guided" class="tab">
+        <div class="card">
+            <h2>Guided Script Builder</h2>
+            <p>Walk through a complete script step-by-step. Early steps explain the code, middle steps ask you to fill in missing parts, and the final challenge makes you build the full script yourself.</p>
+            <div class="controls">
+                <select id="guidedLanguage" onchange="loadGuidedLessons()">
+                    <option>Python</option>
+                    <option>JavaScript</option>
+                    <option>SQL</option>
+                </select>
+                <select id="guidedLessonSelect" onchange="selectGuidedLesson()"></select>
+                <button onclick="previousGuidedStep()">Previous Step</button>
+                <button onclick="nextGuidedStep()">Next Step</button>
+            </div>
+            <div id="guidedLessonBox" class="problem-box"></div>
         </div>
     </section>
 
