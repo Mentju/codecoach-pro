@@ -29,3 +29,101 @@ async function askTutor(){
     });
     document.getElementById("tutorAnswer").textContent = result.answer;
 }
+
+
+let guidedLessons = [];
+let currentGuidedLesson = null;
+let currentGuidedStep = 0;
+
+async function loadGuidedLessons(){
+    const language = document.getElementById("guidedLanguage").value;
+    guidedLessons = await fetchJSON(`/api/guided-lessons?language=${encodeURIComponent(language)}`);
+    const select = document.getElementById("guidedLessonSelect");
+    select.innerHTML = guidedLessons.map(lesson => `<option value="${lesson.id}">${lesson.title}</option>`).join("");
+    selectGuidedLesson();
+}
+
+function selectGuidedLesson(){
+    const lessonId = document.getElementById("guidedLessonSelect").value;
+    currentGuidedLesson = guidedLessons.find(lesson => lesson.id === lessonId);
+    currentGuidedStep = 0;
+    renderGuidedStep();
+}
+
+function renderGuidedStep(){
+    const box = document.getElementById("guidedLessonBox");
+    if(!currentGuidedLesson){
+        box.innerHTML = "<p>No guided lesson found.</p>";
+        return;
+    }
+
+    const step = currentGuidedLesson.steps[currentGuidedStep];
+    const isFinal = step.mode === "final";
+    const isLearn = step.mode === "learn";
+
+    box.innerHTML = `
+        <h3>${currentGuidedLesson.title}</h3>
+        <p><span class="badge">${currentGuidedLesson.language}</span><span class="badge">Step ${currentGuidedStep + 1} of ${currentGuidedLesson.steps.length}</span><span class="badge">${step.mode}</span></p>
+        <h4>${step.title}</h4>
+        <p>${step.explanation}</p>
+        ${step.prompt ? `<p><strong>Your task:</strong> ${step.prompt}</p>` : ""}
+        <textarea id="guidedAnswer" class="answer-box">${step.code || ""}</textarea>
+        <br><br>
+        ${currentGuidedLesson.language === "Python" ? `<button onclick="copyGuidedToPython()">Run in Python Lab</button>` : ""}
+        ${currentGuidedLesson.language === "JavaScript" ? `<button onclick="copyGuidedToJS()">Run in JavaScript Lab</button>` : ""}
+        ${currentGuidedLesson.language === "SQL" ? `<button onclick="copyGuidedToSQL()">Run in SQL Lab</button>` : ""}
+        <button onclick="checkGuidedStep()">Check Step</button>
+        <button onclick="showGuidedHint()">Hint</button>
+        ${isLearn ? `<p><em>This is a learning step. Read it, run it, then continue.</em></p>` : ""}
+        ${isFinal ? `<p><strong>Final challenge:</strong> Complete the full script without copying earlier steps.</p>` : ""}
+        <p id="guidedFeedback"></p>
+    `;
+}
+
+function nextGuidedStep(){
+    if(!currentGuidedLesson) return;
+    currentGuidedStep = Math.min(currentGuidedStep + 1, currentGuidedLesson.steps.length - 1);
+    renderGuidedStep();
+}
+
+function previousGuidedStep(){
+    if(!currentGuidedLesson) return;
+    currentGuidedStep = Math.max(currentGuidedStep - 1, 0);
+    renderGuidedStep();
+}
+
+function showGuidedHint(){
+    const step = currentGuidedLesson.steps[currentGuidedStep];
+    document.getElementById("guidedFeedback").textContent = "Hint: " + (step.hint || "Run the code and read the explanation.");
+}
+
+async function checkGuidedStep(){
+    const answer = document.getElementById("guidedAnswer").value;
+    const result = await fetchJSON("/api/check-guided-step", {
+        method: "POST",
+        headers: {"Content-Type":"application/json"},
+        body: JSON.stringify({
+            lesson_id: currentGuidedLesson.id,
+            step_index: currentGuidedStep,
+            answer
+        })
+    });
+    document.getElementById("guidedFeedback").textContent = result.message;
+}
+
+function copyGuidedToPython(){
+    document.getElementById("pythonCode").value = document.getElementById("guidedAnswer").value;
+    showTab("python");
+}
+
+function copyGuidedToJS(){
+    document.getElementById("jsCode").value = document.getElementById("guidedAnswer").value;
+    showTab("javascript");
+}
+
+function copyGuidedToSQL(){
+    document.getElementById("sqlCode").value = document.getElementById("guidedAnswer").value;
+    showTab("sql");
+}
+
+loadGuidedLessons();
