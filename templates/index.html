@@ -58,6 +58,11 @@
                     <option>SQL</option>
                 </select>
                 <select id="guidedLessonSelect" onchange="selectGuidedLesson()"></select>
+                <select id="guidedStepType" onchange="jumpGuidedSection()">
+                    <option value="learn">Early Learning Steps</option>
+                    <option value="guided">Middle Guided Steps</option>
+                    <option value="final">Final Challenge</option>
+                </select>
                 <button onclick="previousGuidedStep()">Previous Step</button>
                 <button onclick="nextGuidedStep()">Next Step</button>
             </div>
