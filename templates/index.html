@@ -2,168 +2,81 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>CodeCoach Pro</title>
+    <title>CodeCoach Pro Certification Prep</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#161b22">
-    <meta name="description" content="CodeCoach Pro: Python, JavaScript, and SQL learning app">
     <link rel="manifest" href="/manifest.json">
-    <link rel="apple-touch-icon" href="/static/icons/icon-192.png">
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
 <header>
     <h1>CodeCoach Pro</h1>
-    <p>Python + JavaScript + SQL training app</p>
+    <p>Python + JavaScript + SQL Certification-Prep Practice Trainer</p>
 </header>
-
 <nav>
     <button onclick="showTab('dashboard')">Dashboard</button>
-    <button onclick="showTab('roadmap')">Roadmap</button>
-    <button onclick="showTab('challenges')">Challenges</button>
+    <button onclick="showTab('practice')">Practice Problems</button>
     <button onclick="showTab('python')">Python Lab</button>
     <button onclick="showTab('javascript')">JavaScript Lab</button>
     <button onclick="showTab('sql')">SQL Lab</button>
-    <button onclick="showTab('portfolio')">Portfolio</button>
+    <button onclick="showTab('sessions')">Study Tracker</button>
+    <button onclick="showTab('tutor')">Ask Tutor</button>
 </nav>
-
 <main>
     <section id="dashboard" class="tab active">
         <div class="card">
-            <h2>Progress Dashboard</h2>
+            <h2>Certification Prep Dashboard</h2>
+            <p>This app now includes 360 certification-style problems: 120 Python, 120 JavaScript, and 120 SQL. Completing them will prepare you strongly, but no app can guarantee a certification pass without also using the official exam objectives and timed practice exams.</p>
             <div id="stats"></div>
         </div>
+    </section>
 
+    <section id="practice" class="tab">
         <div class="card">
-            <h2>Add Practice Session</h2>
+            <h2>Practice Problems</h2>
+            <p>Choose language, difficulty, and domain. Work through every domain before attempting a certification exam.</p>
+            <div class="controls">
+                <select id="practiceLanguage" onchange="loadDomainsAndPractice()"><option>Python</option><option>JavaScript</option><option>SQL</option></select>
+                <select id="practiceDifficulty" onchange="loadPractice()"><option>All</option><option>Beginner</option><option>Intermediate</option><option>Advanced</option></select>
+                <select id="practiceDomain" onchange="loadPractice()"><option>All</option></select>
+                <button onclick="nextProblem()">Next Problem</button>
+            </div>
+            <div id="problemBox" class="problem-box"></div>
+        </div>
+    </section>
+
+    <section id="python" class="tab"><div class="card"><h2>Python Lab</h2><textarea id="pythonCode" class="code">print("Hello Brandon")</textarea><button onclick="runPython()">Run Python</button><pre id="pythonOutput"></pre></div></section>
+    <section id="javascript" class="tab"><div class="card"><h2>JavaScript Lab</h2><textarea id="jsCode" class="code">document.getElementById("jsOutput").textContent = "Hello JavaScript";</textarea><button onclick="runJavaScript()">Run JavaScript</button><pre id="jsOutput"></pre></div></section>
+    <section id="sql" class="tab"><div class="card"><h2>SQL Lab</h2><p>Sample tables: <strong>students</strong> and <strong>expenses</strong></p><textarea id="sqlCode" class="code">SELECT * FROM students;</textarea><button onclick="runSQL()">Run SQL</button><p id="sqlMessage"></p><div id="sqlOutput"></div></div></section>
+    <section id="sessions" class="tab">
+        <div class="card">
+            <h2>Add Study Session</h2>
             <form id="sessionForm">
-                <label>Language</label>
-                <select id="language" required>
-                    <option value="">Choose</option>
-                    <option>Python</option>
-                    <option>JavaScript</option>
-                    <option>SQL</option>
-                    <option>HTML/CSS</option>
-                    <option>Full Stack</option>
-                </select>
-
-                <label>Topic</label>
-                <input id="topic" placeholder="Example: loops, SELECT queries, DOM events" required>
-
-                <label>Minutes</label>
-                <input id="minutes" type="number" min="1" required>
-
-                <label>Notes</label>
-                <textarea id="notes" placeholder="What did you practice?"></textarea>
-
+                <label>Language</label><select id="language"><option>Python</option><option>JavaScript</option><option>SQL</option><option>Full Stack</option></select>
+                <label>Topic</label><input id="topic" placeholder="Example: loops, SQL SELECT, DOM events">
+                <label>Minutes</label><input id="minutes" type="number" min="1">
+                <label>Notes</label><textarea id="notes"></textarea>
                 <button type="submit">Save Session</button>
             </form>
             <p id="sessionMessage"></p>
         </div>
+        <div class="card"><h2>Recent Sessions</h2><div id="sessionList"></div></div>
+    </section>
 
+    <section id="tutor" class="tab">
         <div class="card">
-            <h2>Recent Sessions</h2>
-            <div id="sessions"></div>
+            <h2>Ask the CodeCoach Tutor</h2>
+            <p>Ask questions about Python, JavaScript, SQL, debugging, or certification prep. This built-in tutor works without an API key.</p>
+            <label>Your Question</label>
+            <textarea id="tutorQuestion" placeholder="Example: How does GROUP BY work in SQL?"></textarea>
+            <label>Optional Context or Code</label>
+            <textarea id="tutorContext" placeholder="Paste your code, SQL query, or problem here"></textarea>
+            <button onclick="askTutor()">Ask Tutor</button>
+            <pre id="tutorAnswer"></pre>
         </div>
     </section>
 
-    <section id="roadmap" class="tab">
-        <div class="card">
-            <h2>12-Week Roadmap</h2>
-            <div id="roadmapList"></div>
-        </div>
-    </section>
-
-    <section id="challenges" class="tab">
-        <div class="card">
-            <h2>Daily Coding Challenges</h2>
-            <p>Write your answer or code, then check it. The checker looks for the key concept.</p>
-            <div id="challengeList"></div>
-        </div>
-    </section>
-
-    <section id="python" class="tab">
-        <div class="card">
-            <h2>Python Lab</h2>
-            <p>Practice beginner Python here. For safety, imports and file access are blocked.</p>
-            <textarea id="pythonCode" class="code">name = "Brandon"
-for i in range(1, 6):
-    print(name, i)</textarea>
-            <button onclick="runPython()">Run Python</button>
-            <pre id="pythonOutput"></pre>
-        </div>
-    </section>
-
-    <section id="javascript" class="tab">
-        <div class="card">
-            <h2>JavaScript Lab</h2>
-            <p>Write JavaScript and run it in your browser.</p>
-            <textarea id="jsCode" class="code">const name = "Brandon";
-let total = 0;
-
-for (let i = 1; i <= 5; i++) {
-  total += i;
-}
-
-document.getElementById("jsOutput").textContent =
-  `${name}, your total is ${total}`;</textarea>
-            <button onclick="runJavaScript()">Run JavaScript</button>
-            <pre id="jsOutput"></pre>
-        </div>
-    </section>
-
-    <section id="sql" class="tab">
-        <div class="card">
-            <h2>SQL Lab</h2>
-            <p>Practice SQL against sample tables: <strong>students</strong> and <strong>expenses</strong>.</p>
-            <textarea id="sqlCode" class="code">SELECT * FROM students;</textarea>
-            <button onclick="runSQL()">Run SQL</button>
-            <p id="sqlMessage"></p>
-            <div id="sqlOutput"></div>
-
-            <h3>Try These</h3>
-            <pre>SELECT name, grade FROM students WHERE grade >= 85;
-SELECT language, AVG(grade) FROM students GROUP BY language;
-SELECT category, SUM(amount) FROM expenses GROUP BY category ORDER BY SUM(amount) DESC;</pre>
-        </div>
-    </section>
-
-    <section id="portfolio" class="tab">
-        <div class="card">
-            <h2>Portfolio Project Builder</h2>
-            <p>Use this to plan projects you can later put on GitHub.</p>
-
-            <form id="portfolioForm">
-                <label>Project Title</label>
-                <input id="projectTitle" placeholder="Example: Budget Tracker" required>
-
-                <label>Status</label>
-                <select id="projectStatus">
-                    <option>Idea</option>
-                    <option>Planning</option>
-                    <option>Building</option>
-                    <option>Finished</option>
-                </select>
-
-                <label>Notes</label>
-                <textarea id="projectNotes" placeholder="Features, tech stack, next steps"></textarea>
-
-                <button type="submit">Save Project</button>
-            </form>
-            <p id="portfolioMessage"></p>
-        </div>
-
-        <div class="card">
-            <h2>Suggested Portfolio Projects</h2>
-            <div id="projectIdeas"></div>
-        </div>
-
-        <div class="card">
-            <h2>Your Saved Projects</h2>
-            <div id="portfolioList"></div>
-        </div>
-    </section>
 </main>
-
 <script src="/static/script.js"></script>
 </body>
 </html>
