@@ -1,0 +1,213 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f3f5f8;
+    color: #222;
+}
+
+header {
+    background: #161b22;
+    color: white;
+    padding: 28px;
+    text-align: center;
+}
+
+nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    padding: 12px;
+    background: #24292f;
+}
+
+nav button {
+    background: white;
+    color: #222;
+    border: none;
+    padding: 10px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+main {
+    width: min(1150px, 94%);
+    margin: 24px auto;
+}
+
+.tab {
+    display: none;
+}
+
+.tab.active {
+    display: block;
+}
+
+.card {
+    background: white;
+    border-radius: 14px;
+    padding: 22px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    margin-bottom: 20px;
+}
+
+h1, h2, h3 {
+    margin-top: 0;
+}
+
+form {
+    display: grid;
+    gap: 10px;
+}
+
+input, select, textarea, button {
+    font-size: 16px;
+    padding: 10px;
+}
+
+textarea {
+    min-height: 80px;
+}
+
+button {
+    cursor: pointer;
+    border: none;
+    border-radius: 8px;
+    background: #161b22;
+    color: white;
+}
+
+button:hover {
+    opacity: 0.88;
+}
+
+.code {
+    width: 100%;
+    min-height: 230px;
+    font-family: Consolas, monospace;
+    background: #0d1117;
+    color: #d6deeb;
+    border-radius: 10px;
+    padding: 14px;
+}
+
+pre {
+    background: #0d1117;
+    color: #d6deeb;
+    padding: 14px;
+    border-radius: 10px;
+    overflow-x: auto;
+}
+
+.item {
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 14px;
+    margin: 12px 0;
+}
+
+.completed {
+    background: #eaffea;
+    border-color: #9ad29a;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 12px;
+}
+
+.stat {
+    background: #f0f2f5;
+    border-radius: 12px;
+    padding: 14px;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+    background: white;
+}
+
+td, th {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+
+/* PWA + mobile improvements */
+html {
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    overscroll-behavior-y: contain;
+}
+
+nav {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+nav button {
+    min-height: 44px;
+}
+
+input, select, textarea, button {
+    max-width: 100%;
+}
+
+@media (max-width: 700px) {
+    header {
+        padding: 20px 14px;
+    }
+
+    header h1 {
+        font-size: 1.7rem;
+    }
+
+    nav {
+        justify-content: flex-start;
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        padding: 10px;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    nav button {
+        flex: 0 0 auto;
+        white-space: nowrap;
+        padding: 10px 12px;
+        font-size: 14px;
+    }
+
+    main {
+        width: 96%;
+        margin: 14px auto;
+    }
+
+    .card {
+        padding: 16px;
+        border-radius: 12px;
+    }
+
+    .code {
+        min-height: 260px;
+        font-size: 14px;
+    }
+
+    table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    .grid {
+        grid-template-columns: 1fr;
+    }
+}
