@@ -9,6 +9,163 @@ import contextlib
 app = Flask(__name__)
 DB_PATH = Path("codecoach_pro.db")
 
+GUIDED_LESSONS = [
+  {
+    "id": "python_expense_tracker",
+    "language": "Python",
+    "title": "Build a Python Expense Tracker",
+    "description": "Walk through a complete Python script that stores expenses, calculates totals, and prints a small report.",
+    "final_goal": "Create a full expense tracker script without help.",
+    "steps": [
+      {
+        "title": "Step 1: Create expense data",
+        "explanation": "Every useful program starts with data. Here, we store expenses in a list of dictionaries. Each dictionary represents one expense with a category and amount.",
+        "mode": "learn",
+        "code": "expenses = [\n    {'category': 'Food', 'amount': 25.50},\n    {'category': 'Gas', 'amount': 40.00},\n    {'category': 'School', 'amount': 75.25}\n]\n\nprint(expenses)",
+        "check": "expenses"
+      },
+      {
+        "title": "Step 2: Loop through the expenses",
+        "explanation": "A loop lets us work with each expense one at a time. This is how programs process lists of data.",
+        "mode": "learn",
+        "code": "for expense in expenses:\n    print(expense['category'], expense['amount'])",
+        "check": "for"
+      },
+      {
+        "title": "Step 3: Add the total",
+        "explanation": "Now we create a total variable and add each amount to it. This is a common pattern in business, finance, and data analysis scripts.",
+        "mode": "guided",
+        "prompt": "Fill in the missing line so each expense amount is added to total.",
+        "code": "total = 0\n\nfor expense in expenses:\n    # add amount to total below\n    \n\nprint('Total spending:', total)",
+        "answer_key": "total += expense['amount']",
+        "hint": "Use total += expense['amount']"
+      },
+      {
+        "title": "Step 4: Group spending by category",
+        "explanation": "Real reports usually group data. A dictionary is a good way to store totals by category.",
+        "mode": "guided",
+        "prompt": "Complete the dictionary update so each category gets its own spending total.",
+        "code": "category_totals = {}\n\nfor expense in expenses:\n    category = expense['category']\n    amount = expense['amount']\n\n    if category not in category_totals:\n        category_totals[category] = 0\n\n    # add amount to the correct category below\n    \n\nprint(category_totals)",
+        "answer_key": "category_totals[category] += amount",
+        "hint": "Use category_totals[category] += amount"
+      },
+      {
+        "title": "Final Challenge: Build the complete script",
+        "explanation": "Now put everything together. Create the expenses list, calculate the total, group spending by category, and print a report.",
+        "mode": "final",
+        "prompt": "Complete the full Python expense tracker script from scratch.",
+        "code": "# Final challenge: build the full expense tracker\n# Requirements:\n# 1. Create a list named expenses\n# 2. Each expense should have category and amount\n# 3. Calculate total spending\n# 4. Calculate category totals\n# 5. Print total and category totals\n\n",
+        "answer_key": "category_totals",
+        "hint": "Your final script should include expenses, a for loop, total, and category_totals."
+      }
+    ]
+  },
+  {
+    "id": "javascript_todo_app",
+    "language": "JavaScript",
+    "title": "Build a JavaScript To-Do List",
+    "description": "Walk through a browser-based JavaScript script that stores tasks, adds tasks, and renders them to the page.",
+    "final_goal": "Create a working mini to-do script without help.",
+    "steps": [
+      {
+        "title": "Step 1: Create task data",
+        "explanation": "A to-do app needs a place to store tasks. We use an array of objects because each task can have a title and completion status.",
+        "mode": "learn",
+        "code": "let tasks = [\n  { title: 'Study Python', done: false },\n  { title: 'Practice SQL', done: true }\n];\n\nconsole.log(tasks);",
+        "check": "tasks"
+      },
+      {
+        "title": "Step 2: Add a new task",
+        "explanation": "The push method adds a new item to an array. This is one of the most common JavaScript patterns.",
+        "mode": "guided",
+        "prompt": "Add a new task object to the tasks array.",
+        "code": "let tasks = [];\n\n// Add a task below\n\n\nconsole.log(tasks);",
+        "answer_key": "tasks.push",
+        "hint": "Use tasks.push({ title: 'Learn JavaScript', done: false });"
+      },
+      {
+        "title": "Step 3: Render tasks as HTML",
+        "explanation": "Rendering means turning data into something the user can see. map() transforms each task into an HTML string.",
+        "mode": "guided",
+        "prompt": "Complete the map function so each task becomes a list item.",
+        "code": "let tasks = [\n  { title: 'Study Python', done: false },\n  { title: 'Practice SQL', done: true }\n];\n\nlet html = tasks.map(task => {\n  // return a list item below\n  \n}).join('');\n\nconsole.log(html);",
+        "answer_key": "return",
+        "hint": "Return `<li>${task.title}</li>`"
+      },
+      {
+        "title": "Step 4: Connect JavaScript to the page",
+        "explanation": "The DOM lets JavaScript change the web page. getElementById selects an element, and innerHTML places content inside it.",
+        "mode": "guided",
+        "prompt": "Set the innerHTML of the output element equal to the html variable.",
+        "code": "let html = '<li>Study JavaScript</li>';\n\n// Put html inside the page element with id output\n\n",
+        "answer_key": "innerHTML",
+        "hint": "Use document.getElementById('output').innerHTML = html;"
+      },
+      {
+        "title": "Final Challenge: Build the full to-do script",
+        "explanation": "Now build the full script. Create tasks, add a new task, turn tasks into HTML, and render them to the page.",
+        "mode": "final",
+        "prompt": "Complete a full JavaScript to-do script from scratch.",
+        "code": "// Final challenge: build the full to-do script\n// Requirements:\n// 1. Create a tasks array\n// 2. Add at least one task with push()\n// 3. Use map() to create list items\n// 4. Use innerHTML to render the list\n\n",
+        "answer_key": "innerHTML",
+        "hint": "Your final script should include tasks, push, map, and innerHTML."
+      }
+    ]
+  },
+  {
+    "id": "sql_sales_report",
+    "language": "SQL",
+    "title": "Build a SQL Sales/Expense Report",
+    "description": "Walk through SQL queries that select, filter, group, and summarize business data.",
+    "final_goal": "Write a full business-report SQL query without help.",
+    "steps": [
+      {
+        "title": "Step 1: Select all records",
+        "explanation": "Most SQL work starts by viewing the table. SELECT * shows all columns and rows from a table.",
+        "mode": "learn",
+        "code": "SELECT * FROM expenses;",
+        "check": "SELECT"
+      },
+      {
+        "title": "Step 2: Select specific columns",
+        "explanation": "In real work, you usually select only the columns you need. This keeps reports cleaner.",
+        "mode": "guided",
+        "prompt": "Select only category and amount from the expenses table.",
+        "code": "-- Select category and amount below\n\n",
+        "answer_key": "SELECT category, amount FROM expenses",
+        "hint": "Use SELECT category, amount FROM expenses;"
+      },
+      {
+        "title": "Step 3: Filter rows with WHERE",
+        "explanation": "WHERE filters rows before grouping or sorting. It helps answer specific questions.",
+        "mode": "guided",
+        "prompt": "Write a query to select only Food expenses.",
+        "code": "-- Select Food expenses below\n\n",
+        "answer_key": "WHERE category",
+        "hint": "Use WHERE category = 'Food'"
+      },
+      {
+        "title": "Step 4: Group and summarize",
+        "explanation": "GROUP BY is how SQL creates summaries. SUM(amount) totals spending for each category.",
+        "mode": "guided",
+        "prompt": "Complete a query that totals amount by category.",
+        "code": "SELECT category, SUM(amount) AS total_spent\nFROM expenses\n-- group by category below\n\n",
+        "answer_key": "GROUP BY category",
+        "hint": "Add GROUP BY category;"
+      },
+      {
+        "title": "Final Challenge: Build the full SQL report",
+        "explanation": "Now write a business report query that shows total spending by category and sorts highest to lowest.",
+        "mode": "final",
+        "prompt": "Write a complete SQL report query from scratch.",
+        "code": "-- Final challenge\n-- Requirements:\n-- 1. Select category\n-- 2. Calculate SUM(amount) as total_spent\n-- 3. Group by category\n-- 4. Order highest total first\n\n",
+        "answer_key": "ORDER BY",
+        "hint": "Use SELECT category, SUM(amount) AS total_spent FROM expenses GROUP BY category ORDER BY total_spent DESC;"
+      }
+    ]
+  }
+]
+
 PRACTICE_PROBLEMS = [
   {
     "id": 1,
@@ -4033,6 +4190,37 @@ def manifest():
 @app.route("/service-worker.js")
 def service_worker():
     return send_from_directory("static", "service-worker.js")
+
+
+@app.route("/api/guided-lessons")
+def guided_lessons():
+    language = request.args.get("language", "").strip()
+    lessons = GUIDED_LESSONS
+    if language:
+        lessons = [lesson for lesson in lessons if lesson["language"].lower() == language.lower()]
+    return jsonify(lessons)
+
+@app.route("/api/check-guided-step", methods=["POST"])
+def check_guided_step():
+    data = request.get_json()
+    lesson_id = data.get("lesson_id", "")
+    step_index = int(data.get("step_index", 0))
+    answer = data.get("answer", "")
+
+    lesson = next((item for item in GUIDED_LESSONS if item["id"] == lesson_id), None)
+    if not lesson:
+        return jsonify({"ok": False, "message": "Lesson not found."}), 404
+
+    if step_index < 0 or step_index >= len(lesson["steps"]):
+        return jsonify({"ok": False, "message": "Step not found."}), 404
+
+    step = lesson["steps"][step_index]
+    key = step.get("answer_key") or step.get("check") or ""
+
+    if key.lower() in answer.lower():
+        return jsonify({"ok": True, "message": "Correct. Move to the next step."})
+
+    return jsonify({"ok": False, "message": "Not quite. " + step.get("hint", "Review the explanation and try again.")})
 
 @app.route("/api/domains")
 def get_domains():
