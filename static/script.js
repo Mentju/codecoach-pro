@@ -78,6 +78,7 @@ function renderGuidedStep(){
         ${isFinal ? `<p><strong>Final challenge:</strong> Complete the full script without copying earlier steps.</p>` : ""}
         <p id="guidedFeedback"></p>
     `;
+    syncGuidedStepType();
 }
 
 function nextGuidedStep(){
@@ -127,3 +128,23 @@ function copyGuidedToSQL(){
 }
 
 loadGuidedLessons();
+
+
+function syncGuidedStepType(){
+    if(!currentGuidedLesson) return;
+    const step = currentGuidedLesson.steps[currentGuidedStep];
+    const selector = document.getElementById("guidedStepType");
+    if(selector && step){
+        selector.value = step.mode;
+    }
+}
+
+function jumpGuidedSection(){
+    if(!currentGuidedLesson) return;
+    const selectedMode = document.getElementById("guidedStepType").value;
+    const index = currentGuidedLesson.steps.findIndex(step => step.mode === selectedMode);
+    if(index >= 0){
+        currentGuidedStep = index;
+        renderGuidedStep();
+    }
+}
